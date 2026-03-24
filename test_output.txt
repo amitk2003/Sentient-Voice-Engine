@@ -1,0 +1,1 @@
+{'emotion': 'excited', 'intensity': 0.949, 'confidence': 0.793, 'vader_scores': {'neg': 0.0, 'neu': 0.468, 'pos': 0.532, 'compound': 0.528}, 'textblob_scores': {'polarity': 0.469, 'subjectivity': 0.75}, 'all_emotions': {'happy': 0.743, 'excited': 0.982, 'calm': 0.0, 'neutral': 0.0, 'concerned': 0.0, 'surprised': 0.0, 'inquisitive': 0.0, 'frustrated': 0.0, 'sad': 0.0}}
