@@ -285,6 +285,15 @@ voiceproject/
 ```
 
 ---
+## 📸 Screenshots
+
+![User_prompt](screenshots/user_prompt.png)
+![Emotion Analysis](screenshots/Emotion_analysis.png)
+![inputBox](screenshots/InputBox.png)
+![EmotionTypes](screenshots/EmotionTypes.png)
+## sample audio output
+Exicited Emotion
+[Listen](output/empathy_excited_100_33a1bfa7.wav)
 
 ## 📄 License
 
