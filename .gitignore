@@ -12,9 +12,6 @@ build/
 .eggs/
 *.egg
 .env
-output/
-*.wav
-*.mp3
 .idea/
 .vscode/
 *.swp
