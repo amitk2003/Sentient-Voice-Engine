@@ -90,10 +90,10 @@ class EmotionMapResponse(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend():
     """Serve the main web interface."""
-    frontend_path = Path(__file__).parent / "static" / "index.html"
+    frontend_path = Path(__file__).parent / "templates" / "index.html"
     if frontend_path.exists():
         return HTMLResponse(content=frontend_path.read_text(encoding="utf-8"))
-    return HTMLResponse(content="<h1>Empathy Engine API</h1><p>Frontend not found. Please check /static/index.html</p>")
+    return HTMLResponse(content="<h1>Empathy Engine API</h1><p>Frontend not found. Please check /templates/index.html</p>")
 
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
