@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Empathy Engine — EmotionEcho</title>
+    <meta name="description" content="AI-powered expressive speech synthesis that detects emotion and modulates voice characteristics for human-like delivery.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-section">
+                <div class="logo-icon" id="logoIcon">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="20" stroke="url(#logoGrad)" stroke-width="2.5" fill="none"/>
+                        <path d="M14 28C14 28 17 32 24 32C31 32 34 28 34 28" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="17" cy="20" r="2.5" fill="url(#logoGrad)"/>
+                        <circle cx="31" cy="20" r="2.5" fill="url(#logoGrad)"/>
+                        <!-- Sound waves -->
+                        <path d="M38 16C40 18 41 21 41 24C41 27 40 30 38 32" stroke="url(#logoGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <path d="M42 12C45 16 47 20 47 24C47 28 45 32 42 36" stroke="url(#logoGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48">
+                                <stop offset="0%" stop-color="#a78bfa"/>
+                                <stop offset="50%" stop-color="#60a5fa"/>
+                                <stop offset="100%" stop-color="#34d399"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>The Empathy Engine</h1>
+                    <p class="tagline">Giving AI a Human Voice</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="badge-dot"></span>
+                <span>AI-Powered</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section glass-card">
+                <div class="section-header">
+                    <div class="section-icon">✍️</div>
+                    <div>
+                        <h2>Enter Your Text</h2>
+                        <p class="section-subtitle">Type or paste text to synthesize with emotional expression</p>
+                    </div>
+                </div>
+
+                <div class="textarea-wrapper">
+                    <textarea
+                        id="textInput"
+                        placeholder="Try something like: 'I'm so excited about this incredible opportunity!' or 'I'm really worried about the upcoming deadline...'"
+                        maxlength="5000"
+                        rows="4"
+                    ></textarea>
+                    <div class="textarea-footer">
+                        <span class="char-count"><span id="charCount">0</span> / 5000</span>
+                        <div class="engine-toggle">
+                            <label class="toggle-label" for="engineSelect">Engine:</label>
+                            <select id="engineSelect" class="engine-select">
+                                <option value="gtts">Google TTS (Online)</option>
+                                <option value="pyttsx3">pyttsx3 (Offline)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Examples -->
+                <div class="examples-row">
+                    <span class="examples-label">Try:</span>
+                    <button class="example-chip" data-text="This is the best news I've ever received! I'm absolutely thrilled and over the moon!">😄 Excited</button>
+                    <button class="example-chip" data-text="I'm really concerned about the project timeline. Things aren't looking good and I'm worried we might miss the deadline.">😟 Concerned</button>
+                    <button class="example-chip" data-text="The meeting is scheduled for 3 PM tomorrow in the main conference room.">😐 Neutral</button>
+                    <button class="example-chip" data-text="This is absolutely unacceptable! I've been waiting for three weeks and nobody has responded to my requests!">😠 Frustrated</button>
+                    <button class="example-chip" data-text="I feel so alone today. Everything seems dark and hopeless, and I just can't shake this sadness.">😢 Sad</button>
+                    <button class="example-chip" data-text="How does this new system work? Can you walk me through the main features?">🤔 Curious</button>
+                    <button class="example-chip" data-text="Wait, WHAT?! I can't believe they actually won! That's completely unexpected!">😲 Surprised</button>
+                </div>
+
+                <button id="synthesizeBtn" class="synthesize-btn" disabled>
+                    <span class="btn-icon">🎙️</span>
+                    <span class="btn-text">Synthesize Speech</span>
+                    <div class="btn-loader" id="btnLoader"></div>
+                </button>
+            </section>
+
+            <!-- Results Grid -->
+            <div class="results-grid" id="resultsGrid" style="display: none;">
+                <!-- Emotion Analysis Card -->
+                <section class="emotion-card glass-card">
+                    <div class="section-header">
+                        <div class="section-icon" id="emotionEmoji">🔍</div>
+                        <div>
+                            <h2>Emotion Detected</h2>
+                            <p class="section-subtitle">Multi-signal analysis result</p>
+                        </div>
+                    </div>
+
+                    <div class="emotion-result">
+                        <div class="emotion-badge" id="emotionBadge">
+                            <span class="emotion-name" id="emotionName">—</span>
+                            <span class="emotion-confidence" id="emotionConfidence">—</span>
+                        </div>
+
+                        <div class="intensity-meter">
+                            <div class="intensity-label">
+                                <span>Intensity</span>
+                                <span id="intensityValue" class="intensity-value">0%</span>
+                            </div>
+                            <div class="intensity-bar">
+                                <div class="intensity-fill" id="intensityFill" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Emotion Radar Chart -->
+                        <div class="emotion-bars" id="emotionBars"></div>
+                    </div>
+
+                    <!-- Sentiment Scores -->
+                    <div class="sentiment-scores" id="sentimentScores">
+                        <div class="score-item">
+                            <span class="score-label">VADER Compound</span>
+                            <span class="score-value" id="vaderScore">—</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">Polarity</span>
+                            <span class="score-value" id="polarityScore">—</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">Subjectivity</span>
+                            <span class="score-value" id="subjectivityScore">—</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Voice Parameters Card -->
+                <section class="voice-card glass-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎛️</div>
+                        <div>
+                            <h2>Voice Modulation</h2>
+                            <p class="section-subtitle">Applied vocal parameters</p>
+                        </div>
+                    </div>
+
+                    <div class="voice-params">
+                        <div class="param-dial" id="rateDial">
+                            <svg viewBox="0 0 120 120" class="dial-svg">
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#rateGrad)" stroke-width="8"
+                                    stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+                                    class="dial-progress" id="rateProgress"/>
+                                <defs>
+                                    <linearGradient id="rateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#60a5fa"/>
+                                        <stop offset="100%" stop-color="#a78bfa"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="dial-center">
+                                <span class="dial-value" id="rateValue">1.0x</span>
+                                <span class="dial-label">Rate</span>
+                            </div>
+                        </div>
+
+                        <div class="param-dial" id="pitchDial">
+                            <svg viewBox="0 0 120 120" class="dial-svg">
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#pitchGrad)" stroke-width="8"
+                                    stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+                                    class="dial-progress" id="pitchProgress"/>
+                                <defs>
+                                    <linearGradient id="pitchGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#34d399"/>
+                                        <stop offset="100%" stop-color="#60a5fa"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="dial-center">
+                                <span class="dial-value" id="pitchValue">0st</span>
+                                <span class="dial-label">Pitch</span>
+                            </div>
+                        </div>
+
+                        <div class="param-dial" id="volumeDial">
+                            <svg viewBox="0 0 120 120" class="dial-svg">
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#volGrad)" stroke-width="8"
+                                    stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+                                    class="dial-progress" id="volumeProgress"/>
+                                <defs>
+                                    <linearGradient id="volGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#f472b6"/>
+                                        <stop offset="100%" stop-color="#fb923c"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="dial-center">
+                                <span class="dial-value" id="volumeValue">1.0x</span>
+                                <span class="dial-label">Volume</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="voice-description" id="voiceDescription">
+                        <span class="desc-label">Mode:</span>
+                        <span class="desc-text" id="voiceDescText">—</span>
+                    </div>
+
+                    <div class="processing-info">
+                        <div class="info-item">
+                            <span class="info-label">Engine</span>
+                            <span class="info-value" id="engineUsed">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Duration</span>
+                            <span class="info-value" id="audioDuration">—</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Processing</span>
+                            <span class="info-value" id="processingTime">—</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Audio Player -->
+            <section class="audio-section glass-card" id="audioSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-icon">🔊</div>
+                    <div>
+                        <h2>Audio Output</h2>
+                        <p class="section-subtitle">Listen to the emotionally modulated speech</p>
+                    </div>
+                </div>
+
+                <div class="audio-player-container">
+                    <div class="waveform-visual" id="waveformVisual">
+                        <!-- Waveform bars generated by JS -->
+                    </div>
+
+                    <audio id="audioPlayer" controls></audio>
+
+                    <div class="audio-actions">
+                        <button class="audio-action-btn" id="downloadBtn" title="Download Audio">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download .wav
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emotion Map Reference -->
+            <section class="map-section glass-card">
+                <div class="section-header">
+                    <div class="section-icon">📊</div>
+                    <div>
+                        <h2>Emotion-to-Voice Map</h2>
+                        <p class="section-subtitle">How each emotion modulates the voice</p>
+                    </div>
+                </div>
+
+                <div class="emotion-map-grid" id="emotionMapGrid">
+                    <!-- Generated by JS -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>The Empathy Engine &bull; Built with FastAPI, VADER, TextBlob &amp; gTTS</p>
+            <p class="footer-sub">AI-powered emotional speech synthesis</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
