@@ -285,7 +285,33 @@ voiceproject/
 ```
 
 ---
+## 📸 Screenshots
 
+![User_prompt](screenshots/user_prompt.png)
+![Emotion Analysis](screenshots/Emotion_analysis.png)
+![inputBox](screenshots/InputBox.png)
+![EmotionTypes](screenshots/EmotionTypes.png)
+## 🔊 Sample Audio Outputs
+
+### 😊 Excited Emotion
+<audio controls>
+  <source src="https://raw.githubusercontent.com/amitk2003/Sentient-Voice-Engine/main/output/empathy_excited_100_33a1bfa7.wav" type="audio/wav">
+</audio>
+
+### 😤 Frustrated
+<audio controls>
+  <source src="https://raw.githubusercontent.com/amitk2003/Sentient-Voice-Engine/main/output/empathy_frustrated_95_365fe12a.wav" type="audio/wav">
+</audio>
+
+### 🤔 Inquisitive
+<audio controls>
+  <source src="https://raw.githubusercontent.com/amitk2003/Sentient-Voice-Engine/main/output/empathy_inquisitive_81_67da5125.wav" type="audio/wav">
+</audio>
+
+### 😐 Neutral
+<audio controls>
+  <source src="https://raw.githubusercontent.com/amitk2003/Sentient-Voice-Engine/main/output/empathy_neutral_10_0e8ec290.wav" type="audio/wav">
+</audio>
 ## 📄 License
 
 MIT License — feel free to use, modify, and distribute.
